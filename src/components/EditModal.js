@@ -17,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function AddEditModal({open,handleClose,createRestaurant,editData,edit}) {
-    const [state,setState]=useState("");
+export default function AddEditModal({open,handleClose,editRestaurant,editData}) {
+    const [state,setState]=useState(editData);
 
 
 
@@ -27,15 +27,23 @@ const handleChange=(event)=>{
 
 }
 
-const handleClick=()=>{
-    createRestaurant(state)
+const handleClick=(id)=>{
+    editRestaurant(state,id)
 }
 
 
+const handleEditChange=(event)=>{
+
+  setState({...state,[event.target.name]:event.target.value});
+
+
+
+
+}
 
   return (
     <div>
-     
+    
       <Modal
         open={open}
         onClose={handleClose}
@@ -43,9 +51,10 @@ const handleClick=()=>{
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-
-        <TextField id="outlined-basic" onChange={handleChange} label="Restaurant Name"   variant="outlined" />
-        <Button variant="contained"  onClick={handleClick}>Create</Button>
+        <h1>Edit Modal</h1>
+        <TextField id="outlined-basic" onChange={handleEditChange} label="Restaurant Name"  value={state.name}  variant="outlined" />
+<Button variant="contained"  onClick={()=>handleClick(state.id)}>Create</Button>
+       
 
         </Box>
       </Modal>

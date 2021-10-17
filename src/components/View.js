@@ -3,6 +3,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from "axios";
 import Button from '@mui/material/Button';
 import AddEditModal from './AddEditModal';
+import EditModal from './AddEditModal';
+
 
 
 
@@ -35,7 +37,7 @@ const columns = [
         renderCell: (params) => {
        
     
-          return <Button variant="contained">Edit</Button>
+          return <Button variant="contained" onClick={()=>editHAndler(params.row)}>Edit</Button>
         },
         
     },
@@ -54,14 +56,35 @@ const columns = [
 
 
     const [open, setOpen] = useState(false);
+    
+    const [openEdit, setOpenEdit] = useState(false);
     const [deleted,setDeleted]=useState(false);
+    const [editData,setEditData]=useState({});
+   
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const handleEditOpen = () => setOpen(true);
+    const handleEditClose = () => setOpen(false);
 
 
     const [state,setState]=useState([]);
 
+const editHAndler=(data)=>{
 
+  debugger;
+  setEditData(data);
+  setOpenEdit(true);
+
+
+ 
+
+
+
+  
+
+
+}
 
     const createRestaurant=(data)=>{
         const payload={name:data};
@@ -92,6 +115,20 @@ const columns = [
 
     }
 
+    const editRestaurant=(data,id)=>{
+
+      const payload={name:data};
+      axios.put(`http://5.189.130.81:1337/restaurants/${id}`,payload).then(res=>{
+         
+          setOpen(false);
+         
+
+      }).catch(err=>{
+          console.log(err);
+      })
+      /// axios api 
+      
+    }
 
 
     const getInitialData=()=>{
@@ -119,11 +156,13 @@ useEffect(() => {
           columns={columns}
           pageSize={20}
           rowsPerPageOptions={[5,10,20]}
-          checkboxSelection
+         
         />
 
 
-        <AddEditModal  createRestaurant={createRestaurant} handleClose={handleClose}  handleOpen={handleOpen} open={open}  />
+<EditModal  editData={editData}  editRestaurant={editRestaurant} handleClose={handleEditClose}  handleOpen={handleEditOpen} open={openEdit}  />
+
+        <AddEditModal createRestaurant={createRestaurant} handleClose={handleClose}  handleOpen={handleOpen} open={open}  />
 
       </div>
     )
