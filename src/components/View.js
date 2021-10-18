@@ -2,8 +2,8 @@ import React,{useEffect,useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from "axios";
 import Button from '@mui/material/Button';
-import AddEditModal from './AddEditModal';
-import EditModal from './AddEditModal';
+//import AddEditModal from './AddEditModal';
+import EditModal from './EditModal';
 
 
 
@@ -72,7 +72,6 @@ const columns = [
 
 const editHAndler=(data)=>{
 
-  debugger;
   setEditData(data);
   setOpenEdit(true);
 
@@ -120,7 +119,7 @@ const editHAndler=(data)=>{
       const payload={name:data};
       axios.put(`http://5.189.130.81:1337/restaurants/${id}`,payload).then(res=>{
          
-          setOpen(false);
+          setOpenEdit(false);
          
 
       }).catch(err=>{
@@ -143,7 +142,7 @@ const editHAndler=(data)=>{
 
 useEffect(() => {
     getInitialData();
-}, [open,deleted]);
+}, [open,deleted,openEdit]);
 
     return (
         <div style={{ height: 800, width: '100%' ,marginTop:"200px" }}>
@@ -151,18 +150,22 @@ useEffect(() => {
 <Button variant="contained" onClick={handleOpen} color="success" style={{marginBottom:"50px" }}>
   Create Restaurant
 </Button>
-        <DataGrid
-          rows={state}
-          columns={columns}
-          pageSize={20}
-          rowsPerPageOptions={[5,10,20]}
-         
-        />
+
+{
+  state.length>0? <DataGrid
+  rows={state}
+  columns={columns}
+  pageSize={20}
+  rowsPerPageOptions={[5,10,20]}
+ 
+/>:""
+}
+       
 
 
 <EditModal  editData={editData}  editRestaurant={editRestaurant} handleClose={handleEditClose}  handleOpen={handleEditOpen} open={openEdit}  />
 
-        <AddEditModal createRestaurant={createRestaurant} handleClose={handleClose}  handleOpen={handleOpen} open={open}  />
+      <AddEditModal createRestaurant={createRestaurant} handleClose={handleClose}  handleOpen={handleOpen} open={open}  /> 
 
       </div>
     )

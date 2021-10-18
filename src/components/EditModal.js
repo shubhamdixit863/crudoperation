@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -18,14 +18,18 @@ const style = {
 };
 
 export default function AddEditModal({open,handleClose,editRestaurant,editData}) {
-    const [state,setState]=useState(editData);
+    const [state,setState]=useState(editData.name);
 
 
 
-const handleChange=(event)=>{
-    setState(event.target.value);
 
-}
+
+
+useEffect(() => {
+
+    setState(editData.name);
+  
+}, [editData])
 
 const handleClick=(id)=>{
     editRestaurant(state,id)
@@ -34,7 +38,7 @@ const handleClick=(id)=>{
 
 const handleEditChange=(event)=>{
 
-  setState({...state,[event.target.name]:event.target.value});
+  setState(event.target.value);
 
 
 
@@ -52,8 +56,8 @@ const handleEditChange=(event)=>{
       >
         <Box sx={style}>
         <h1>Edit Modal</h1>
-        <TextField id="outlined-basic" onChange={handleEditChange} label="Restaurant Name"  value={state.name}  variant="outlined" />
-<Button variant="contained"  onClick={()=>handleClick(state.id)}>Create</Button>
+        <TextField id="outlined-basic" onChange={handleEditChange} label="Restaurant Name"  value={state}  variant="outlined" />
+<Button variant="contained"  onClick={()=>handleClick(editData.id)}>Create</Button>
        
 
         </Box>
